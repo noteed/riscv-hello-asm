@@ -6,9 +6,11 @@ machine.
 
 I searched for such a program on the Internet but the only examples I found
 were either bare metal C, or assembly but relying on an OS. Eventually I took
-the bare metal hello program from the [riscv-probe](https://github.com)
-repository and stripped everything I could. [The result](https://github.com)
-can be dissambled and serve as a guide to adapt other hello world examples.
+the bare metal hello program from the
+[riscv-probe](https://github.com/michaeljclark/riscv-probe) repository and
+stripped everything I could. [The
+result](https://github.com/noteed/riscv-hello-c) can be disassembled and serve
+as a guide to adapt other hello world examples.
 
 While the resulting program works as intended, it is entirely possible that
 this is some poor code.

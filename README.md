@@ -16,6 +16,16 @@ While the resulting program works as intended, it is entirely possible that
 this is some poor code.
 
 
+## Toolchain
+
+I'm using Nix and the toolchain from
+[github.com/bgamari/riscv.nix.git](https://github.com/bgamari/riscv.nix.git),
+running it directly from the `result/bin` directory.
+
+Someone seems to have success with the SiFive binaries as seen in [the first
+issue](https://github.com/noteed/riscv-hello-asm/issues/1).
+
+
 ## Building
 
 Assuming the toolchain is in the `$PATH`, running the following produce our
@@ -39,13 +49,17 @@ linked, not stripped
 Run it with:
 
 ```
-$ qemu-system-riscv64 -nographic -machine sifive_u -kernel hello
+$ qemu-system-riscv64 -nographic -machine sifive_u -bios none -kernel hello
+Hello.
 Hello.
 QEMU: Terminated
 ```
 
 Note: the program enters an infinite loop after producing the `Hello.` text.
 Type `ctrl-a x` to stop QEMU.
+
+Note: the string `Hello.` is displayed twice, I don't know yet why (I guess
+this is something that can be fixed by adding some QEMU command-line option).
 
 
 ## Assembly
@@ -57,6 +71,7 @@ To dissemble the program:
 $ riscv64-unknown-elf-objdump -d hello
 hello:     file format elf64-littleriscv
 
+
 Disassembly of section .text:
 
 0000000080000000 <_start>:
@@ -66,10 +81,10 @@ Disassembly of section .text:
     8000000c:	0000006f          j	8000000c <_start+0xc>
 
 0000000080000010 <puts>:
-    80000010:	100137b7          lui	a5,0x10013
+    80000010:	100107b7          lui	a5,0x10010
     80000014:	00054583          lbu	a1,0(a0)
     80000018:	00058c63          beqz	a1,80000030 <puts+0x20>
-    8000001c:	0007a703          lw	a4,0(a5) # 10013000 <UART_BASE>
+    8000001c:	0007a703          lw	a4,0(a5) # 10010000 <UART_BASE>
     80000020:	fe074ee3          bltz	a4,8000001c <puts+0xc>
     80000024:	00b7a023          sw	a1,0(a5)
     80000028:	00150513          addi	a0,a0,1

@@ -1,5 +1,5 @@
 .align 2
-.equ UART_BASE,         0x10013000
+.equ UART_BASE,         0x10010000
 .equ UART_REG_TXFIFO,   0
 
 .section .text

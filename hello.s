@@ -6,6 +6,8 @@
 .globl _start
 
 _start:
+        csrr a1, mhartid             # read our hartid and only run on processor 0
+        bne a1, zero, 3f
 1:      auipc a0, %pcrel_hi(msg)     # load msg(hi)
         addi  a0, a0, %pcrel_lo(1b)  # load msg(lo)
 2:      jal   ra, puts

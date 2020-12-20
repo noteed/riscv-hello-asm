@@ -12,9 +12,6 @@ stripped everything I could. [The
 result](https://github.com/noteed/riscv-hello-c) can be disassembled and serve
 as a guide to adapt other hello world examples.
 
-While the resulting program works as intended, it is entirely possible that
-this is some poor code.
-
 
 ## Toolchain
 

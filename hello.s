@@ -9,6 +9,8 @@ _start:
         csrr  t0, mhartid             # read hardware thread id (`hart` stands for `hardware thread`)
         bnez  t0, halt                # run only on the first hardware thread (hartid == 0), halt all the other threads
 
+        la    sp, stack_top           # setup stack pointer
+
         la    a0, msg                 # load address of `msg` to a0 argument register
         jal   puts                    # jump to `puts` subroutine, return address is stored in ra regster
 

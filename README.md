@@ -25,7 +25,7 @@ issue](https://github.com/noteed/riscv-hello-asm/issues/1).
 
 ## Building
 
-Assuming the toolchain is in the `$PATH`, running the following produce our
+Assuming the toolchain is in the `$PATH`, running the following produces our
 `hello` program.
 
 ```
@@ -57,7 +57,7 @@ Type `ctrl-a x` to stop QEMU.
 
 ## Assembly
 
-To dissemble the program:
+To disassemble the program:
 
 
 ```

@@ -6,22 +6,32 @@
 .globl _start
 
 _start:
-        csrr a1, mhartid             # read our hartid and only run on processor 0
-        bne a1, zero, 3f
-1:      auipc a0, %pcrel_hi(msg)     # load msg(hi)
-        addi  a0, a0, %pcrel_lo(1b)  # load msg(lo)
-2:      jal   ra, puts
-3:      j     3b
+        csrr  t0, mhartid             # read hardware thread id (`hart` stands for `hardware thread`)
+        bnez  t0, halt                # run only on the first hardware thread (hartid == 0), halt all the other threads
 
-puts:
-        li    a5, UART_BASE
-1:      lbu   a1, (a0)
-        beqz  a1, 3f
-2:      lw    a4, UART_REG_TXFIFO(a5)
-        bltz  a4, 2b
-        sw    a1, UART_REG_TXFIFO(a5)
-        addi  a0, a0, 1
+        la    sp, stack_top           # setup stack pointer
+
+        la    a0, msg                 # load address of `msg` to a0 argument register
+        jal   puts                    # jump to `puts` subroutine, return address is stored in ra regster
+
+halt:   j     halt                    # enter the infinite loop
+
+puts:                                 # `puts` subroutine writes null-terminated string to UART (serial communication port)
+                                      # input: a0 register specifies the starting address of a null-terminated string
+                                      # clobbers: t0, t1, t2 temporary registers
+
+        li    t0, UART_BASE           # t0 = UART_BASE
+1:      lbu   t1, (a0)                # t1 = load unsigned byte from memory address specified by a0 register
+        beqz  t1, 3f                  # break the loop, if loaded byte was null
+
+                                      # wait until UART is ready
+2:      lw    t2, UART_REG_TXFIFO(t0) # t2 = uart[UART_REG_TXFIFO]
+        bltz  t2, 2b                  # t2 becomes positive once UART is ready for transmission
+        sw    t1, UART_REG_TXFIFO(t0) # send byte, uart[UART_REG_TXFIFO] = t1
+
+        addi  a0, a0, 1               # increment a0 address by 1 byte
         j     1b
+
 3:      ret
 
 .section .rodata

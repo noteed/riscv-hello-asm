@@ -59,7 +59,7 @@ Type `ctrl-a x` to stop QEMU.
 ## Sifive_e machine
 
 This program can be compiled for more resticted machines like `sifive_e`
-that support 32-bit RISC-V, have small amount of RAM and requires executable
+that support 32-bit RISC-V, have small amount of RAM and require executable
 code to be placed in ROM with different start address.
 
 Assuming the toolchain is in the `$PATH`, running the following produces our

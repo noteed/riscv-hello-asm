@@ -118,3 +118,11 @@ Disassembly of section .text:
     8000003c:	fe9ff06f         j	80000024 <puts+0x4>
     80000040:	00008067         ret
 ```
+
+
+## Elsewhere
+
+Here is a link to another repository that links back to this repository, and
+that may be worth checking out.
+
+- [Bare metal RISC-V assembly in QEMU](https://github.com/rtfb/riscv64-in-qemu)

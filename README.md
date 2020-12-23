@@ -2,7 +2,7 @@
 
 This is a bare metal 64-bit RISC-V assembly program outputing `Hello.`. It is
 compiled with the riscv-gnu-toolchain and can be run with the QEMU `sifive_u`
-machine.
+and `sifive_e` machines.
 
 I searched for such a program on the Internet but the only examples I found
 were either bare metal C, or assembly but relying on an OS. Eventually I took
@@ -29,11 +29,12 @@ Assuming the toolchain is in the `$PATH`, running the following produces our
 `hello` program.
 
 ```
-$ riscv64-unknown-elf-gcc -march=rv64g -mabi=lp64 -static -mcmodel=medany \
-  -fvisibility=hidden -nostdlib -nostartfiles -Thello.ld hello.s -o hello
+$ riscv64-unknown-elf-gcc -march=rv64g -mabi=lp64 -static -mcmodel=medany    \
+  -fvisibility=hidden -nostdlib -nostartfiles -Tsifive_u/hello.ld -Isifive_u \
+  hello.s -o hello
 ```
 
-The result is a 64-bit RISC-V binary.
+The result is a 64-bit RISC-V binary compatible with QEMU `sifive_u` machine.
 
 ```
 $ file hello
@@ -47,6 +48,33 @@ Run it with:
 
 ```
 $ qemu-system-riscv64 -nographic -machine sifive_u -bios none -kernel hello
+Hello.
+QEMU: Terminated
+```
+
+Note: the program enters an infinite loop after producing the `Hello.` text.
+Type `ctrl-a x` to stop QEMU.
+
+
+## Sifive_e machine
+
+This program can be compiled for more resticted machines like `sifive_e`
+that support 32-bit RISC-V, have small amount of RAM and requires executable
+code to be placed in ROM with different start address.
+
+Assuming the toolchain is in the `$PATH`, running the following produces our
+`hello` program, but now ready for `sifive_e`.
+
+```
+$ riscv64-unknown-elf-gcc -march=rv32g -mabi=ilp32 -static -mcmodel=medany   \
+  -fvisibility=hidden -nostdlib -nostartfiles -Tsifive_e/hello.ld -Isifive_e \
+  hello.s -o hello
+```
+
+Run it with:
+
+```
+$ qemu-system-riscv32 -nographic -machine sifive_e -bios none -kernel hello
 Hello.
 QEMU: Terminated
 ```

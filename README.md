@@ -15,21 +15,23 @@ as a guide to adapt other hello world examples.
 
 ## Toolchain
 
-I'm using Nix and the toolchain from
-[github.com/bgamari/riscv.nix.git](https://github.com/bgamari/riscv.nix.git),
-running it directly from the `result/bin` directory.
+I'm using Nix and use a toolchain provided by Nixpkgs's [cross-compiling
+infrastructure](https://nixos.wiki/wiki/Cross_Compiling). This repository
+contains a `shell.nix` file, and the example commands in this README can be
+followed with either `nix-shell --attr riscv64` for the `sifive_u` case, or
+`nix-shell --attr riscv32` for the `sifive_e` case.
 
 Someone seems to have success with the SiFive binaries as seen in [the first
 issue](https://github.com/noteed/riscv-hello-asm/issues/1).
 
 
-## Building
+## Building for the `sifive_u` machine
 
 Assuming the toolchain is in the `$PATH`, running the following produces our
 `hello` program.
 
 ```
-$ riscv64-unknown-elf-gcc -march=rv64g -mabi=lp64 -static -mcmodel=medany    \
+$ riscv64-unknown-linux-gnu-gcc -march=rv64g -mabi=lp64 -static -mcmodel=medany \
   -fvisibility=hidden -nostdlib -nostartfiles -Tsifive_u/hello.ld -Isifive_u \
   hello.s -o hello
 ```
@@ -41,8 +43,6 @@ $ file hello
 hello: ELF 64-bit LSB executable, UCB RISC-V, version 1 (SYSV), statically
 linked, not stripped
 ```
-
-## Running
 
 Run it with:
 
@@ -56,7 +56,7 @@ Note: the program enters an infinite loop after producing the `Hello.` text.
 Type `ctrl-a x` to stop QEMU.
 
 
-## Sifive_e machine
+## Building for the `sifive_e` machine
 
 This program can be compiled for more resticted machines like `sifive_e`
 that support 32-bit RISC-V, have small amount of RAM and require executable
@@ -66,10 +66,13 @@ Assuming the toolchain is in the `$PATH`, running the following produces our
 `hello` program, but now ready for `sifive_e`.
 
 ```
-$ riscv64-unknown-elf-gcc -march=rv32g -mabi=ilp32 -static -mcmodel=medany   \
+$ riscv32-none-elf-gcc -march=rv32g -mabi=ilp32 -static -mcmodel=medany \
   -fvisibility=hidden -nostdlib -nostartfiles -Tsifive_e/hello.ld -Isifive_e \
   hello.s -o hello
 ```
+
+Note: using either `riscv32-none-elf-gcc` or `riscv64-unknown-linux-gnu-gcc`
+works.
 
 Run it with:
 
@@ -85,7 +88,7 @@ Type `ctrl-a x` to stop QEMU.
 
 ## Assembly
 
-To disassemble the program:
+To disassemble the program (here the the one for the `sifive_u` machine):
 
 
 ```

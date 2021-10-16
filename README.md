@@ -88,7 +88,7 @@ Type `ctrl-a x` to stop QEMU.
 
 ## Assembly
 
-To disassemble the program (here the the one for the `sifive_u` machine):
+To disassemble the program (here the one for the `sifive_u` machine):
 
 
 ```
